@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        
+
+        img {
+
+            width: 100px;
+            height: 100px;
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+        window.onload = getPokemonJSON();
+
+        let pokemonArray = [];
+        let pokemonArrayNew = [];
+        let div = document.createElement("div");
+        document.body.appendChild(div);
+
+        let table = document.createElement("table");
+        div.appendChild(table);
+
+        let thead = document.createElement("thead");
+        
+        thead.innerHTML = `<td>Id</td><td>Name</td><td>"HP"</td><td>Attack</td><td>defense</td><td>$SpAttack</td><td>SpDefense</td><td>Speed</td><td>Img</td>`;
+        table.appendChild(thead);
+
+
+
+
+        let tbody = document.createElement("tbody");
+        table.appendChild(tbody);
+
+        // div.setAttribute("class", "unitPokemon");
+
+
+        function getPokemonJSON() {
+            let xhr = new XMLHttpRequest();
+
+            xhr.onload = function () {
+                pokemonArray = JSON.parse(this.responseText);
+                console.log(pokemonArray);
+                for (i = 0; i < pokemonArray.length; i++) {
+                    let tr = document.createElement("tr");
+
+                    let img = document.createElement("img");
+                    let td = document.createElement("td");
+                    // let img = `<img src="" alt="">`;
+                    let ID = pokemonArray[i]["id"].toString().padStart(3, "0");
+
+                    img.setAttribute('src', `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${ID}.png`)
+                    tr.innerHTML = `<td>${ID}</td><td>${pokemonArray[i]["name"]["chinese"]}</td><td>${pokemonArray[i]["base"]["HP"]}</td><td>${pokemonArray[i]["base"]["Attack"]}</td><td>${pokemonArray[i]["base"]["Defense"]}</td><td>${pokemonArray[i]["base"]["Sp. Attack"]}</td><td>${pokemonArray[i]["base"]["Sp. Defense"]}</td><td>${pokemonArray[i]["base"]["Speed"]}</td>`;
+                    td.append(img);
+                    tr.append(td);
+                    tbody.append(tr);
+                }
+            }
+            xhr.open("GET", "https://raw.githubusercontent.com/apprunner/pokemon.json/master/pokedex.json");
+            xhr.send();
+        }
+        table.setAttribute("border", 2);
+
+
+    </script>
+</body>
+
+</html>

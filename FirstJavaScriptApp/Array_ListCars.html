@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+<button>顯示所有汽車名稱</button>
+<ul id="container"></ul>
+
+<script>
+    let btn = document.querySelector("button");
+    let container = document.getElementById("container");
+
+    let Cars = ['BMW', 'Benz', 'Audi','Lexus']
+
+    let imgUrls = [
+        "https://www.bmw.com.tw/content/dam/bmw/common/all-models/3-series/sedan/2018/inform/bmw-3series-3er-inform-lines-04-01.jpg.asset.1566827090337.jpg",
+        "https://channel-auto.com/wp-content/uploads/2020/07/cover-24.jpg",
+        "https://www.audi.com.tw/content/dam/nemo/tw/Model/A8/s8/my-2021/1920x1080-inline-media-gallery/1920x1080-audi-s8-exterior-2021-181013_1.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/4/44/Lexus_LX_570_IMG_0467.jpg"
+    ]
+
+    window.onload = function(){
+        btn.addEventListener("click",listCars);
+    }
+
+    function listCars(){
+        Cars.forEach(function(item,index) {
+            let li =document.createElement("li");
+            let imgUrl = imgUrls[index];
+            li.innerHTML = `汽車索引:${index}，汽車名稱${item} <img src="${imgUrl}">`;
+            
+            container.appendChild(li);
+        });
+    }
+</script>
+
+    
+</body>
+</html>

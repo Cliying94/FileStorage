@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <ul>
+
+    </ul>
+    <script>
+        window.onload = getPokemonJSON();
+
+        let pokemonArray = [];
+        let pokemonArrayNew = [];
+
+        let pokemonArrayID = [];
+        let pokemonArrayChineseName = [];
+        let pokemonArrayHP = [];
+        let pokemonArrayAttack = [];
+        let pokemonArrayDefense = [];
+        let pokemonArraySpAttack = [];
+        let pokemonArraySpDefense = [];
+        let pokemonArrayNew = [];
+
+
+
+
+        function getPokemonJSON() {
+            let xhr = new XMLHttpRequest();
+
+            xhr.onload = function () {
+                pokemonArray = JSON.parse(this.responseText);
+                for (i = 0; i < pokemonArray.length; i++) {
+                    let pokemonID = pokemonArray[i]["id"];
+                    let pokemonChineseName = pokemonArray[i]["name"]["chinese"];
+                    let pokemonHP = pokemonArray[i]["base"]["HP"];
+                    let pokemonAttack = pokemonArray[i]["base"]["Attack"];
+                    let pokemonDefense = pokemonArray[i]["base"]["Defense"];
+                    let pokemonSpAttack = pokemonArray[i]["base"]["Sp. Attack"];
+                    let pokemonSpDefense = pokemonArray[i]["base"]["Sp. Defense"];
+                    let pokemonSpeed = pokemonArray[i]["base"]["Speed"];
+                    pokemonArrayID.push(pokemonID);
+                    pokemonArrayChineseName.push(pokemonChineseName);
+                    pokemonArrayHP.push(pokemonHP);
+                    pokemonArrayAttack.push(pokemonAttack);
+                    pokemonArrayDefense.push(pokemonDefense);
+                    pokemonArraySpAttack.push(pokemonSpAttack);
+                    pokemonArraySpDefense.push(pokemonSpDefense);
+                    pokemonArrayNew.push(pokemonSpeed);
+                    let li = document.createElement("li");
+                    li.innerHTML = pokemonArrayNew;
+                    document.body.appendChild(li);
+
+                }
+                // let pokemonID = pokemonArray[0]["id"];
+
+                // let li = document.createElement("li");
+                // li.innerHTML = pokemonID + pokemonChineseName + pokemonHP + pokemonAttack + pokemonDefense + pokemonSpAttack + pokemonSpAttack + pokemonSpDefense + pokemonSpeed;
+                // document.body.appendChild(li);
+
+                // document.write(pokemonID);
+
+
+            }
+            xhr.open("GET", "https://raw.githubusercontent.com/apprunner/pokemon.json/master/pokedex.json");
+            xhr.send();
+        }
+    </script>
+</body>
+
+</html>
