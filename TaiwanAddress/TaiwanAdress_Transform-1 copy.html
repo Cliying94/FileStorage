@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>台灣縣市郵遞區號資訊列表</h1>
+    <button>讀取網路資料</button>
+    <script type='module'>
+        import { $g } from "../Modules/helpers.js"
+        let zipcodeArray = [];  //原始
+        let ZipCode = [];   //轉換
+
+        $g('button').addEventListener('click', getAddressJSON);
+
+        function getAddressJSON() {
+            let xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                zipcodeArray = JSON.parse(this.responseText);
+                TransformData(zipcodeArray);
+            }
+            xhr.open("Get", "https://raw.githubusercontent.com/apprunner/FileStorage/master/TaiwanAddress.json");
+            xhr.send();
+        };
+        function TransformData(dataArray) {
+
+            dataArray.forEach(item => {
+                let city = item.CityName;
+                let CityArray = [];
+
+                item.AreaList.forEach((x) => {
+
+                    let district = x.AreaName;
+                    let zipCode = x.ZipCode;
+                    let Districts = { District: district, ZipCode: zipCode };
+                    CityArray.push(Districts);
+                })
+                let cities = { City: city, Districts: CityArray };
+                ZipCode.push(cities);
+
+                ZipCode.forEach((item) => {
+                    document.write(
+                        item.City
+                        // CityArray.forEach((item) => {
+                        //      document.write(item.District, item.ZipCode);
+                        //  }))
+                })
+                
+
+            });
+            console.log(ZipCode);
+        }
+
+
+
+
+
+    </script>
+</body>
+
+</html>

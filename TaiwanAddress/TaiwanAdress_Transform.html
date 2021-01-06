@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>台灣縣市郵遞區號資訊列表</h1>
+    <button>讀取網路資料</button>
+    <script type='module'>
+        import { $g } from "../Modules/helpers.js"
+        let zipcodeArray = [];  //原始
+        let ZipCode = [];   //轉換
+        let CityArray = [];
+
+        $g('button').addEventListener('click', getAddressJSON);
+
+        function getAddressJSON() {
+            let xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                zipcodeArray = JSON.parse(this.responseText);
+                // zipcodeArray.forEach(item => {
+                //     document.write(item.CityName+"<br>");
+                //     document.write("<ul>");
+                //     item.AreaList.forEach(item=>{
+                //         document.write("<li>"+item.AreaName+","+item.ZipCode+"<li>");
+                //     });
+                //     document.write("</ul>");                    
+                // });         
+                zipcodeArray.forEach(item => {
+                    let _city = item.CityName;
+                    let _districts =[];
+                    item.AreaList.forEach(item => {
+                        let _district = { District: item.AreaName, ZipCode: item.ZipCode };
+                        _districts.push(_district);
+                    })
+                    let _cityObject = { City: _city, Districts: _districts };
+                    ZipCode.push(_cityObject);
+
+                });
+                console.table(ZipCode);
+            }
+            xhr.open("Get", "https://raw.githubusercontent.com/apprunner/FileStorage/master/TaiwanAddress.json");
+            xhr.send();
+        };
+
+    </script>
+</body>
+
+</html>

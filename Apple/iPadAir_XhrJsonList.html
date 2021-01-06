@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>用XMLHttpRequest請求GitHub JSON資料</h1>
+    <button id="btnGetJSON">Request JSON1</button>
+    <div id='msg'></div>
+    <script>
+        //window.onload = function(){}
+        //Arrow function
+        window.onload = () => {
+            document.querySelector("#btnGetJSON").addEventListener('click', requestIpadJSON);
+        }
+        const url = "https://raw.githubusercontent.com/Cliying94/FileStorage/main/iPadAir2020_Data.json";
+
+        //給人的語意、理解性，由於js是動態語言，其實宣告並無法固定變數的型別，
+        let ipadArray = [];
+        let msg = document.querySelector("#msg");
+
+        function  requestIpadJSON() {
+            let xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                ipadArray = JSON.parse(this.responseText);
+
+                let br = document.createElement("br");
+                ipadArray.forEach((item,index) => {
+                    let ipad = document.createTextNode(`${index+1}.${JSON.stringify(item)}`);
+                    msg.appendChild(ipad);
+                    msg.appendChild(br.cloneNode());
+                    
+                });
+                
+            };
+            xhr.open("GET",url);
+            xhr.send();
+            
+        }
+    </script>
+</body>
+
+</html>

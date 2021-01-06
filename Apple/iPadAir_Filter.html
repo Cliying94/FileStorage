@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .filter {
+            background-color: #eeeeee;
+            position: fixed;
+        }
+
+        select {
+            margin: 20px 0px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>用XMLHttpRequest請求GitHub JSON資料</h1>
+    <div class="filter">
+        <select name="color" id="color">
+            <option value="-1">--請選擇顏色--</option>
+            <option value="gray">太空灰色</option>
+            <option value="silver">銀色</option>
+            <option value="rose">玫瑰金</option>
+            <option value="green">綠色</option>
+            <option value="blue">天藍色</option>
+        </select>
+        <select name="storage" id="storage">
+            <option value="-1">--請選擇容量--</option>
+            <option value="64GB">64GB</option>
+            <option value="256GB">256GB</option>
+        </select>
+        <select name="network" id="network">
+            <option value="-1">--請選擇網路--</option>
+            <option value="Wi-Fi">Wi-Fi</option>
+            <option value="Cellular">Cellular</option>
+        </select>
+
+        <div id='selection'></div>
+        <hr>
+        <button id="btnQuery" disabled="false">查詢Storage & Network規格</button>
+        <div id='specList'></div>
+
+    </div>
+    <!-- <button id="btnGetJSON">Request JSON1</button> -->
+    <div id='msg'></div>
+    <script>
+
+        let selection = document.querySelector("#selection");
+        //window.onload = function(){}
+        //Arrow function
+        window.onload = () => {
+            requestIpadJSON();
+
+            document.querySelector("#color").addEventListener("change", findIpads);
+            document.querySelector("#storage").addEventListener("change", findIpads);
+            document.querySelector("#network").addEventListener("change", findIpads);
+            document.querySelector("#btnQuery").addEventListener("click", listIpads);
+        }
+        const url = "https://raw.githubusercontent.com/Cliying94/FileStorage/main/iPadAir2020_Data.json";
+
+        //給人的語意、理解性，由於js是動態語言，其實宣告並無法固定變數的型別，
+        let ipadArray = [];
+        let msg = document.querySelector("#msg");
+
+        function requestIpadJSON() {
+            let xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                ipadArray = JSON.parse(this.responseText);
+            };
+            xhr.open("GET", url);
+            xhr.send();
+        };
+        let _color, _storage, _network;
+
+        // let Colors = {
+        //     gray: "太空灰色",
+        //     silver: "銀色",
+        //     rose: "玫瑰金色",
+        //     green: "綠色",
+        //     blue: "天藍色",
+        // };
+
+        function findIpads() {
+
+            // let colorElement = document.querySelector("#color").selectedOptions;
+            // debugger;
+            _color = document.querySelector("#color").selectedOptions[0].innerText;
+            _storage = document.querySelector("#storage").selectedOptions[0].value;
+            _network = document.querySelector("#network").selectedOptions[0].value;
+
+
+
+
+            //三個select選種的value不得為-1
+            if (_color == "-1" || _storage == "-1" || _network == "-1") {
+                document.querySelector("#btnQuery").disabled = true;
+                selection.innerHTML = "";
+                return;
+            }
+
+            document.querySelector("#btnQuery").disabled = false;
+            //selection.innerHTML = `color: ${_color}, storage: ${_storage}, network:${_network}<br/>`
+
+            let filterIpads = ipadArray.filter(x => x.color == _color && x.storage == _storage && x.network == _network);
+            let ipad = filterIpads.find(x => x.color == _color);
+            let imgUrl = `http://localhost:5500/Apple${ipad.picture}`;
+            selection.innerHTML = JSON.stringify(ipad)+`<img src="${imgUrl}">`
+        }
+        let filterArray = [];
+        function listIpads() {
+            let br = document.createElement("br");
+
+            filterArray = ipadArray.filter(x => x.color == _color && x.storage == _storage && x.network == _network);
+            let fliterIpads = ipadArray.find(x=> x.color == _color);
+
+            specList.innerHTML = "";
+            filterArray.forEach((item, index) => {
+                let ipad = document.createTextNode(`${index + 1}.${JSON.stringify(item)}`);
+
+                specList.append(ipad);
+                specList.appendChild(br.cloneNode());
+
+            })
+
+        }
+
+
+    </script>
+</body>
+
+</html>
